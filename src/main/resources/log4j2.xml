@@ -18,7 +18,6 @@
             <AppenderRef ref="Console"/>
         </Root>
 
-        <!--<logger name="com.jd.jsf" level="warn"/>-->
         <logger name="com.lm.tobacco.generated" level="@mybatis.log.level@"/>
     </Loggers>
 </Configuration>

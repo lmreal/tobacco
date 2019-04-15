@@ -320,14 +320,12 @@
             </activation>
             <properties>
                 <mybatis.log.level>debug</mybatis.log.level>
-                <jsf.consumer.ehrod.PersonService.alias>PERSON-SERVICE-PREVIEW</jsf.consumer.ehrod.PersonService.alias>
             </properties>
         </profile>
         <profile>
             <id>production</id>
             <properties>
                 <mybatis.log.level>warn</mybatis.log.level>
-                <jsf.consumer.ehrod.PersonService.alias>PERSON-SERVICE</jsf.consumer.ehrod.PersonService.alias>
             </properties>
         </profile>
     </profiles>
