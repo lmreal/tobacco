@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions id="definitions"
+             targetNamespace="http://activiti.org/bpmn20"
+             xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:activiti="http://activiti.org/bpmn">
+
+    <!--name：这个属性是可选的， 对应ProcessDefinition的name属性。 引擎自己不会使用这个属性，它可以用来在用户接口显示便于阅读的名称。-->
+    <process id="vacationRequest" name="Vacation request">
+
+        <startEvent id="processStart" activiti:initiator="employeeName"/>
+
+        <sequenceFlow id="flow0" sourceRef="processStart" targetRef="request"/>
+
+        <userTask id="request" name="请假申请">
+            <documentation>
+                【 ${employeeName} 的请假申请】
+                时间：从${startDate}到${endDate}，共${numberOfDays}天
+                原因：${vacationMotivation}
+            </documentation>
+            <extensionElements>
+                <activiti:formProperty id="numberOfDays" name="Number of days" type="long" value="1" required="true"/>
+                <activiti:formProperty id="startDate" name="First day of holiday (dd-MM-yyy)" datePattern="yyyy-MM-dd" type="date" required="true" />
+                <activiti:formProperty id="endDate" name="First day of holiday (dd-MM-yyy)" datePattern="yyyy-MM-dd" type="date" required="true" />
+                <activiti:formProperty id="vacationMotivation" name="Motivation" type="string" />
+                <activiti:formProperty id="managerName" name="managerName" type="string"/>
+            </extensionElements>
+            <humanPerformer>
+                <resourceAssignmentExpression>
+                    <formalExpression>${employeeName}</formalExpression>
+                </resourceAssignmentExpression>
+            </humanPerformer>
+        </userTask>
+
+        <sequenceFlow id="flow1" sourceRef="request" targetRef="handleRequest" />
+
+        <userTask id="handleRequest" name="处理请假申请" >
+            <documentation>
+                【 ${employeeName} 的请假申请】
+                时间：从${startDate}到${endDate}，共${numberOfDays}天
+                原因：${vacationMotivation}
+            </documentation>
+            <extensionElements>
+                <activiti:formProperty id="vacationApproved" name="是否同意该申请？" type="enum" required="true">
+                    <activiti:value id="true" name="Approve" />
+                    <activiti:value id="false" name="Reject" />
+                </activiti:formProperty>
+                <activiti:formProperty id="managerMotivation" name="Motivation" type="string" />
+            </extensionElements>
+            <!--<potentialOwner>-->
+                <!--<resourceAssignmentExpression>-->
+                    <!--<formalExpression>management</formalExpression>-->
+                <!--</resourceAssignmentExpression>-->
+            <!--</potentialOwner>-->
+            <humanPerformer>
+                <resourceAssignmentExpression>
+                    <formalExpression>${managerName}</formalExpression>
+                </resourceAssignmentExpression>
+            </humanPerformer>
+        </userTask>
+        <sequenceFlow id="flow2" sourceRef="handleRequest" targetRef="requestApprovedDecision" />
+
+        <exclusiveGateway id="requestApprovedDecision" name="是否通过？" />
+        <sequenceFlow id="flow3" sourceRef="requestApprovedDecision" targetRef="noticeApproval">
+            <conditionExpression xsi:type="tFormalExpression">${vacationApproved == 'true'}</conditionExpression>
+        </sequenceFlow>
+
+        <!--<task id="sendApprovalMail" name="Send confirmation e-mail" />-->
+        <userTask id="noticeApproval" name="审批通过啦！">
+            <documentation>
+                ${managerMotivation}
+            </documentation>
+            <humanPerformer>
+                <resourceAssignmentExpression>
+                    <formalExpression>${employeeName}</formalExpression>
+                </resourceAssignmentExpression>
+            </humanPerformer>
+        </userTask>
+        <sequenceFlow id="flow4" sourceRef="noticeApproval" targetRef="theEnd1" />
+        <endEvent id="theEnd1" />
+
+        <sequenceFlow id="flow5" sourceRef="requestApprovedDecision" targetRef="adjustVacationRequestTask">
+            <conditionExpression xsi:type="tFormalExpression">${vacationApproved == 'false'}</conditionExpression>
+        </sequenceFlow>
+
+        <userTask id="adjustVacationRequestTask" name="修改请假申请">
+            <documentation>
+                ${managerName}不同意你请假${numberOfDays}天的申请，理由：${managerMotivation}。
+            </documentation>
+            <extensionElements>
+                <activiti:formProperty id="numberOfDays" name="Number of days" value="${numberOfDays}" type="long" required="true"/>
+                <activiti:formProperty id="startDate" name="First day of holiday (dd-MM-yyy)" value="${startDate}" datePattern="yyyy-MM-dd" type="date" required="true" />
+                <activiti:formProperty id="endDate" name="First day of holiday (dd-MM-yyy)" datePattern="yyyy-MM-dd" type="date" required="true" />
+                <activiti:formProperty id="vacationMotivation" name="Motivation" value="${vacationMotivation}" type="string" />
+
+                <activiti:formProperty id="resendRequest" name="是否再次发送申请给领导？" type="enum" required="true">
+                    <activiti:value id="true" name="Yes" />
+                    <activiti:value id="false" name="No" />
+                </activiti:formProperty>
+            </extensionElements>
+            <humanPerformer>
+                <resourceAssignmentExpression>
+                    <formalExpression>${employeeName}</formalExpression>
+                </resourceAssignmentExpression>
+            </humanPerformer>
+        </userTask>
+        <sequenceFlow id="flow6" sourceRef="adjustVacationRequestTask" targetRef="resendRequestDecision" />
+
+        <exclusiveGateway id="resendRequestDecision" name="再次发送？"/>
+        <sequenceFlow id="flow7" sourceRef="resendRequestDecision" targetRef="handleRequest">
+            <conditionExpression xsi:type="tFormalExpression">${resendRequest == 'true'}</conditionExpression>
+        </sequenceFlow>
+
+        <sequenceFlow id="flow8" sourceRef="resendRequestDecision" targetRef="theEnd2">
+            <conditionExpression xsi:type="tFormalExpression">${resendRequest == 'false'}</conditionExpression>
+        </sequenceFlow>
+        <endEvent id="theEnd2" />
+
+    </process>
+
+</definitions>

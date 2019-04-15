@@ -1,0 +1,16 @@
+### 通过部门编号查找部门
+GET http://{{host}}/api/dept/00000000
+X-Requested-With: XMLHttpRequest
+Cookie: X-MOCKOR-ERP=liweichao11;X-MOCKOR-TOKEN=JD.COM
+
+### 通过部门编号查找部门（可为空）
+GET http://{{host}}/api/dept/not_exist/nullable
+X-Requested-With: XMLHttpRequest
+Cookie: X-MOCKOR-ERP=liweichao11;X-MOCKOR-TOKEN=JD.COM
+
+###
+GET http://{{host}}/api/dept/京东集团/descr
+X-Requested-With: XMLHttpRequest
+Cookie: X-MOCKOR-ERP=liweichao11;X-MOCKOR-TOKEN=JD.COM
+
+###

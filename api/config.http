@@ -1,0 +1,30 @@
+### 显示全部的配置项
+GET http://{{host}}/api/config
+X-Requested-With: XMLHttpRequest
+Cookie: X-MOCKOR-ERP=liweichao11;X-MOCKOR-TOKEN=JD.COM
+
+### 创建新的配置项
+POST http://{{host}}/api/config
+X-Requested-With: XMLHttpRequest
+Cookie: X-MOCKOR-ERP=liweichao11;X-MOCKOR-TOKEN=JD.COM
+Content-Type: application/json
+
+{
+  "category": "NCategory",
+  "key": "key1",
+  "value": "value1",
+  "desc": "新键值1"
+}
+
+###
+POST http://{{host}}/api/config/paging
+X-Requested-With: XMLHttpRequest
+Cookie: X-MOCKOR-ERP=liweichao11;X-MOCKOR-TOKEN=JD.COM
+Content-Type: application/json
+
+{
+    "pageSize": 2,
+    "pageIndex": 0
+}
+
+###
