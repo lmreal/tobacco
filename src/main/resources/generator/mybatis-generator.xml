@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE generatorConfiguration
-        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
     <!--<classPathEntry location="./target/classes"/>-->
 
@@ -22,10 +23,10 @@
 
         <!--jdbc的数据库连接 -->
         <jdbcConnection
-                driverClass="com.mysql.jdbc.Driver"
-                connectionURL="jdbc:mysql://127.0.0.1:3306/tobacco"
-                userId="root"
-                password="root">
+          driverClass="com.mysql.jdbc.Driver"
+          connectionURL="jdbc:mysql://127.0.0.1:3306/tobacco"
+          userId="root"
+          password="root">
         </jdbcConnection>
 
         <!-- 非必需，类型处理器，在数据库类型和java类型之间的转换控制-->
@@ -37,7 +38,8 @@
             targetPackage     指定生成的model生成所在的包名
             targetProject     指定在该项目下所在的路径
         -->
-        <javaModelGenerator targetPackage="com.lm.tobacco.generated.entity" targetProject="src/generated/java">
+        <javaModelGenerator targetPackage="com.lm.tobacco.generated.entity"
+          targetProject="src/generated/java">
             <!-- 是否允许子包，即targetPackage.schemaName.tableName -->
             <property name="enableSubPackages" value="false"/>
             <!-- 是否对model添加 构造函数 -->
@@ -56,8 +58,8 @@
         </sqlMapGenerator>
 
         <javaClientGenerator targetPackage="com.lm.tobacco.generated.mapper"
-                             targetProject="src/generated/java"
-                             type="ANNOTATEDMAPPER">
+          targetProject="src/generated/java"
+          type="ANNOTATEDMAPPER">
         </javaClientGenerator>
 
         <!-- 数据库表 -->
@@ -68,15 +70,15 @@
             <generatedKey sqlStatement="JDBC" column="id" identity="true"/>
         </table>
         <!--<table tableName="jd_od_dept" modelType="conditional">-->
-            <!--<generatedKey sqlStatement="JDBC" column="id" identity="true"/>-->
-            <!--<columnOverride column="is_formal_org" jdbcType="VARCHAR"-->
-                            <!--javaType="com.jd.hrte.onej.framework.entity.YnEnum"-->
-                            <!--typeHandler="com.jd.hrte.onej.framework.entity.YnTypeHandler">-->
-            <!--</columnOverride>-->
-            <!--<columnOverride column="is_tech_dept" jdbcType="VARCHAR"-->
-                            <!--javaType="com.jd.hrte.onej.framework.entity.YnEnum"-->
-                            <!--typeHandler="com.jd.hrte.onej.framework.entity.YnTypeHandler">-->
-            <!--</columnOverride>-->
+        <!--<generatedKey sqlStatement="JDBC" column="id" identity="true"/>-->
+        <!--<columnOverride column="is_formal_org" jdbcType="VARCHAR"-->
+        <!--javaType="com.jd.hrte.onej.framework.entity.YnEnum"-->
+        <!--typeHandler="com.jd.hrte.onej.framework.entity.YnTypeHandler">-->
+        <!--</columnOverride>-->
+        <!--<columnOverride column="is_tech_dept" jdbcType="VARCHAR"-->
+        <!--javaType="com.jd.hrte.onej.framework.entity.YnEnum"-->
+        <!--typeHandler="com.jd.hrte.onej.framework.entity.YnTypeHandler">-->
+        <!--</columnOverride>-->
         <!--</table>-->
     </context>
 </generatorConfiguration>

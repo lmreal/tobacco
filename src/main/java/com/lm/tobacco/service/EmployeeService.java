@@ -8,11 +8,18 @@ import com.lm.tobacco.generated.entity.Employee;
  */
 public interface EmployeeService {
 
-    /**
-     * 获取员工信息
-     * @param id
-     * @return
-     */
-    Employee getEmployeeInfoById(String id);
+  /**
+   * 获取员工信息
+   *
+   * @param id
+   * @return
+   */
+  Employee getEmployeeInfoById(String id);
 
+  /**
+   * 异步测试方法
+   *
+   * @throws Exception
+   */
+  void async() throws Exception;
 }

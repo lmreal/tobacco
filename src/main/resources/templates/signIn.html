@@ -1,87 +1,89 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-    <title>签到</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
-    <script type="text/javascript" src="./geolocation.min.js"></script>
-    <script type="text/javascript" src="./jquery.js"></script>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+  <title>签到</title>
+  <meta name="viewport"
+        content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+  <script type="text/javascript" src="./geolocation.min.js"></script>
+  <script type="text/javascript" src="./jquery.js"></script>
 </head>
 <body>
-    <form method="POST" id="submit" enctype="multipart/form-data">
-        上班：<p id="signTime"></p>
-        当前位置：<p id="address"></p>
-        选择图片:<input type="file" name="image" accept="image/*">
-    </form>
-    <button onclick="signTime()">签到</button>
-    <br>
-    <a href="/download">导出表</a>
-    <script type="text/javascript">
-        function sign() {
-            var form = new FormData($("#submit")[0]);
-            form.append("address", $("#address").html());
-            form.append("time", $("#signTime").html());
-            jQuery.ajax({
-                type: "POST",
-                url: "/sign",
-                //必须false才会自动加上正确的Content-Type
-                contentType: false,
-                //必须false才会避开jQuery对 formdata 的默认处理
-                //XMLHttpRequest会对 formdata 进行正确的处理
-                processData: false,
-                async: true,
-                cache: false,
-                enctype: 'multipart/form-data',
-                //dataType: "json",
-                //contentType: "application/x-www-form-urlencoded;charset=UTF-8",
-                data: form,
-                success: function(data) {
-                    if (typeof(data) != 'object') {
-                        data = eval("(" + data + ")");
-                    }
-                    alert(data.flag);
-                }
-            })
+<form method="POST" id="submit" enctype="multipart/form-data">
+  上班：<p id="signTime"></p>
+  当前位置：<p id="address"></p>
+  选择图片:<input type="file" name="image" accept="image/*">
+</form>
+<button onclick="signTime()">签到</button>
+<br>
+<a href="/download">导出表</a>
+<script type="text/javascript">
+  function sign() {
+    var form = new FormData($("#submit")[0]);
+    form.append("address", $("#address").html());
+    form.append("time", $("#signTime").html());
+    jQuery.ajax({
+      type: "POST",
+      url: "/sign",
+      //必须false才会自动加上正确的Content-Type
+      contentType: false,
+      //必须false才会避开jQuery对 formdata 的默认处理
+      //XMLHttpRequest会对 formdata 进行正确的处理
+      processData: false,
+      async: true,
+      cache: false,
+      enctype: 'multipart/form-data',
+      //dataType: "json",
+      //contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+      data: form,
+      success: function (data) {
+        if (typeof(data) != 'object') {
+          data = eval("(" + data + ")");
         }
+        alert(data.flag);
+      }
+    })
+  }
 
-        function signTime() {
-            var date = new Date();
-            var weak = ["", "一", "二", "三", "四", "五", "六", "日"];
-            var month = date.getMonth() + 1;
-            var day = date.getDate();
-            var hour = date.getHours();
-            var min = date.getMinutes();
-            var sec = date.getSeconds();
-            var time = date.getFullYear() + "-"
-                + (month <= 9 ? "0" + month : month) + "-"
-                + (day <= 9 ? "0" + day : day) + " 星期"
-                + weak[date.getDay()] + " "
-                + (hour <= 9 ? "0" + hour : hour) + ":"
-                + (min <= 9 ? "0" + min : min) + ":"
-                + (sec <= 9 ? "0" + sec : sec);
-            $("#signTime").html(time);
-            sign();
-        }
+  function signTime() {
+    var date = new Date();
+    var weak = ["", "一", "二", "三", "四", "五", "六", "日"];
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
+    var hour = date.getHours();
+    var min = date.getMinutes();
+    var sec = date.getSeconds();
+    var time = date.getFullYear() + "-"
+      + (month <= 9 ? "0" + month : month) + "-"
+      + (day <= 9 ? "0" + day : day) + " 星期"
+      + weak[date.getDay()] + " "
+      + (hour <= 9 ? "0" + hour : hour) + ":"
+      + (min <= 9 ? "0" + min : min) + ":"
+      + (sec <= 9 ? "0" + sec : sec);
+    $("#signTime").html(time);
+    sign();
+  }
 
-        $(function () {
-            var geolocation = new qq.maps.Geolocation("S4ABZ-ZCVRJ-DREFU-FMMOS-3XJ36-GXFSX", "empl");
+  $(function () {
+    var geolocation = new qq.maps.Geolocation("S4ABZ-ZCVRJ-DREFU-FMMOS-3XJ36-GXFSX", "empl");
 
-            var options = {timeout: 8000};
-            geolocation.getLocation(showPosition, showErr, options);
-        });
+    var options = {timeout: 8000};
+    geolocation.getLocation(showPosition, showErr, options);
+  });
 
-        function showPosition(position) {
-            var address = position.nation + " " + position.province + " " + position.city;
-            if (position.district != undefined && position.addr != undefined) {
-                address += " " + position.district + " " + position.addr
-            }
-            $("#address").append(address);
-        }
+  function showPosition(position) {
+    var address = position.nation + " " + position.province + " " + position.city;
+    if (position.district != undefined && position.addr != undefined) {
+      address += " " + position.district + " " + position.addr
+    }
+    $("#address").append(address);
+  }
 
-        function showErr() {
-            document.getElementById("time").appendChild(document.createElement('p')).innerHTML = "定位失败！";
-            document.getElementById("pos-area").scrollTop = document.getElementById("pos-area").scrollHeight;
-        }
-    </script>
+  function showErr() {
+    document.getElementById("time").appendChild(document.createElement('p')).innerHTML = "定位失败！";
+    document.getElementById("pos-area").scrollTop = document.getElementById(
+      "pos-area").scrollHeight;
+  }
+</script>
 </body>
 </html>
